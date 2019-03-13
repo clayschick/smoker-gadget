@@ -1,4 +1,7 @@
 defmodule Ui.Agent do
+  @moduledoc """
+  Used to hold the `auto` status of the controller.
+  """
   use Agent
 
   @doc """

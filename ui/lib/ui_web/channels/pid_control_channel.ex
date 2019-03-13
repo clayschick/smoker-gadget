@@ -63,7 +63,15 @@ defmodule UiWeb.PidControlChannel do
         :error -> 0.0
       end
 
-    :ok = Ui.PidControl.start(setpoint, kp, ki, kd)
+    :ok =
+      Pid.Agent.update(
+        setpoint: setpoint,
+        kp: kp,
+        ki: ki,
+        kd: kd
+      )
+
+    :ok = Ui.PidControl.start()
 
     {:noreply, socket}
   end

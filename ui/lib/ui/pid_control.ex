@@ -4,31 +4,19 @@ defmodule Ui.PidControl do
   and the update to the UI.
   """
 
-  alias Ui.Agent, as: UiState
-  alias Pid.Agent, as: PidState
-
   @doc """
   Stops the controller and ui update task by setting the
   Ui.Agent.auto to false.
   """
-  def stop(), do: UiState.set_auto(false)
+  def stop(), do: Ui.Agent.set_auto(false)
 
   @doc """
-  Sets the UI auto state to true and sets initial PID
-  state values from the UI.
-
   Starts a Task that will update the UI.
-  """
-  def start(setpoint, kp, ki, kd) do
-    :ok = UiState.set_auto(true)
 
-    :ok =
-      PidState.update(
-        setpoint: setpoint,
-        kp: kp,
-        ki: ki,
-        kd: kd
-      )
+  Sets the UI auto state to true.
+  """
+  def start() do
+    :ok = Ui.Agent.set_auto(true)
 
     {:ok, _} = Task.start(fn -> ui_loop(true) end)
 
@@ -36,17 +24,19 @@ defmodule Ui.PidControl do
   end
 
   @doc """
-  Retrieves the controller results and broadcast them to the UI.
+  Cycles the controller and broadcasts the results to the UI.
 
-  Runs in a Task.
+  Runs recursively in a Task until a `false` boollean type is
+  matched in the function definition. The `:ok` returned will
+  end the Task.
   """
-  def ui_loop(_ = true) do
+  def ui_loop(true) do
     Pid.Controller.cycle() |> broadcast_to_ui()
 
-    ui_loop(UiState.is_auto?())
+    ui_loop(Ui.Agent.is_auto?())
   end
 
-  def ui_loop(_ = false), do: :ok
+  def ui_loop(false), do: :ok
 
   defp broadcast_to_ui({:ok, %{input: input, output: output}}) do
     UiWeb.Endpoint.broadcast("pid:control", "controller_updated", %{
