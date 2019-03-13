@@ -4,46 +4,27 @@ defmodule Ui.PidControl do
   and the update to the UI.
   """
 
-  @doc """
-  Starts a Task with the controller function and a Task
-  that starts a ui refresh/update function.
+  alias Ui.Agent, as: UiState
+  alias Pid.Agent, as: PidState
 
-  The attrs argument is coming from the controller form
-  in the UI and is submitted by the user. I don't have a
-  fancy web front-end framework to use for form validation
-  and I don't want to use the ol' alert box. So I'm checking
-  for an :error and setting the value to 0 or 0.0.
-  """
-  def start(setpoint, kp, ki, kd) do
-    Pid.Agent.update(
-      auto: true,
-      setpoint: setpoint,
-      kp: kp,
-      ki: ki,
-      kd: kd
-    )
+  def start_stream(setpoint, kp, ki, kd) do
+    :ok = UiState.set_auto(true)
 
-    # If this function returned the last_input and last_ouput
-    # on every cycle then I could use it to push up to the UI
-    # This links to the current process but do I really care?
-    {:ok, _} = Task.start(fn -> Pid.Controller.run() end)
+    :ok =
+      PidState.update(
+        setpoint: setpoint,
+        kp: kp,
+        ki: ki,
+        kd: kd
+      )
 
-    {:ok, _} = Task.start(fn -> update_ui(%{auto: true}) end)
+    {:ok, _} = Task.start(fn -> update_ui_stream() end)
 
     :ok
   end
 
-  def start_stream(setpoint, kp, ki, kd) do
-    Pid.Agent.update(
-      auto: true,
-      setpoint: setpoint,
-      kp: kp,
-      ki: ki,
-      kd: kd
-    )
-    {:ok, _} = Task.start(fn -> update_ui_stream() end)
-  end
-
+  # This function needs to return a value when we stop
+  # the controller so that the Task is stopped
   def update_ui_stream() do
     Pid.Controller.eval_stream()
     |> Stream.map(fn {:ok, %{input: input, output: output}} ->
@@ -52,15 +33,78 @@ defmodule Ui.PidControl do
         output: output
       })
     end)
-    |> Stream.take_while(fn _ -> Pid.Agent.is_auto?() end)
+    |> Stream.take_while(fn _ -> UiState.is_auto?() end)
     |> Stream.run()
   end
 
   @doc """
   Stops the controller and ui update task by setting the
-  Pid.Agent.auto to false.
+  Ui.Agent.auto to false.
   """
-  def stop(), do: Pid.Agent.update(auto: false)
+  def stop(), do: UiState.set_auto(false)
+
+  @doc """
+  Sets the UI auto state to true and sets initial PID
+  state values from the UI.
+
+  Starts a Task that will update the UI.
+  """
+  def start_with_loop(setpoint, kp, ki, kd) do
+    :ok = UiState.set_auto(true)
+
+    :ok =
+      PidState.update(
+        setpoint: setpoint,
+        kp: kp,
+        ki: ki,
+        kd: kd
+      )
+
+    {:ok, _} = Task.start(fn -> ui_loop(true) end)
+
+    :ok
+  end
+
+  @doc """
+  This function is ran in a Task and will retrieve the
+  controller results and broadcast them to the UI.
+  """
+  def ui_loop(_ = true) do
+    Pid.Controller.run_with() |> broadcast_to_ui()
+
+    ui_loop(UiState.is_auto?())
+  end
+
+  def ui_loop(_ = false), do: :ok
+
+  defp broadcast_to_ui({:ok, %{input: input, output: output}}) do
+    UiWeb.Endpoint.broadcast("pid:control", "controller_updated", %{
+      input: input,
+      output: output
+    })
+  end
+
+  @doc """
+  Starts a Task with the controller function and a Task
+  that starts a ui refresh/update function.
+  """
+  def start_loop(setpoint, kp, ki, kd) do
+    :ok = UiState.set_auto(true)
+
+    :ok =
+      PidState.update(
+        setpoint: setpoint,
+        kp: kp,
+        ki: ki,
+        kd: kd
+      )
+
+    {:ok, _} = Task.start(fn -> Pid.Controller.run() end)
+
+    {:ok, _} = Task.start(fn -> update_ui(true) end)
+
+    :ok
+  end
 
   @doc """
   Gets the controller state and sends the current values for
@@ -75,10 +119,10 @@ defmodule Ui.PidControl do
   I'd like to find a better option than recursion
   or a better way to do this in general, if there is one.
   """
-  def update_ui(%{auto: false}), do: :ok
+  def update_ui(_ = false), do: :ok
 
-  def update_ui(%{auto: true}) do
-    controller_state = Pid.Agent.get_state()
+  def update_ui(_ = true) do
+    controller_state = PidState.get_state()
 
     UiWeb.Endpoint.broadcast("pid:control", "controller_updated", %{
       input: controller_state.last_input,
@@ -88,6 +132,6 @@ defmodule Ui.PidControl do
     # I don't like this timer.
     Process.sleep(1000)
 
-    update_ui(%{auto: controller_state.auto})
+    update_ui(UiState.is_auto?())
   end
 end

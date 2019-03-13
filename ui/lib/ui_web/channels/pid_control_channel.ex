@@ -36,6 +36,9 @@ defmodule UiWeb.PidControlChannel do
   end
 
   def handle_in("start_controller", attrs, socket) do
+    # I don't have a fancy web front-end framework to use for form
+    # validation and I don't want to use the ol' alert box. So I'm
+    # checking for an :error and setting the value to 0 or 0.0.
     setpoint =
       case Integer.parse(attrs["setpoint"]) do
         {float, _} -> float
@@ -60,9 +63,13 @@ defmodule UiWeb.PidControlChannel do
         :error -> 0.0
       end
 
-    :ok = Ui.PidControl.start_stream(setpoint, kp, ki, kd)
+    # IO.puts("Starting the stream")
+    # :ok = Ui.PidControl.start_stream(setpoint, kp, ki, kd)
+    # IO.puts("Started the stream")
 
-    # :ok = Ui.PidControl.start(setpoint, kp, ki, kd)
+    IO.puts("Starting the with loop")
+    :ok = Ui.PidControl.start_with_loop(setpoint, kp, ki, kd)
+    IO.puts("Started the with loop")
 
     {:noreply, socket}
   end

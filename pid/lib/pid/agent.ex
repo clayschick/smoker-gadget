@@ -10,7 +10,6 @@ defmodule Pid.Agent do
               ki: 0,
               kd: 0,
               setpoint: 0,
-              auto: false,
               accumulation_of_error: 0,
               last_time: 0,
               last_input: 0,
@@ -30,6 +29,4 @@ defmodule Pid.Agent do
     Agent.update(__MODULE__, &struct!(&1, new_state_fields))
 
   def get_state(), do: Agent.get(__MODULE__, & &1)
-
-  def is_auto?(), do: Agent.get(__MODULE__, & IO.inspect(&1.auto, label: "Is Auto"))
 end

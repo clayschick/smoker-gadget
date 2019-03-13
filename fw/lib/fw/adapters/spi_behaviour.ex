@@ -1,4 +1,4 @@
-defmodule Fw.SpiAdapter do
+defmodule Fw.Adapters.SpiBehaviour do
 
   @callback open(device :: String.t(), options :: charlist()) :: {:ok, reference()}
 

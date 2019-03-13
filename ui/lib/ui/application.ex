@@ -15,8 +15,8 @@ defmodule Ui.Application do
       # Start a Task.Supervisor so I can dynamically start
       # the controller task from the UI
       # {Task.Supervisor, name: Ui.TaskSupervisor}
-      {Registry, keys: :unique, name: Ui.Registry}
-      # {Ui.PidServer}
+      # {Registry, keys: :unique, name: Ui.Registry}
+      Ui.Agent
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

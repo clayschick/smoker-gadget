@@ -243,7 +243,7 @@ var chart = new Chart(ctx, {
       xAxes: [{
         type: 'realtime',
         realtime: {
-          duration: 30000,
+          duration: 40000,
           refresh: 500, // this needs to be faster than the controller loop
           delay: 2000,
           onRefresh: onRefresh

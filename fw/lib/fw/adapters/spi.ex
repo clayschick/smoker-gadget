@@ -8,7 +8,7 @@ defmodule Fw.Adapters.Spi do
   alias Circuits.SPI
 
   # I shall abide by the adapter rules
-  @behaviour Fw.SpiAdapter
+  @behaviour Fw.Adapters.SpiBehaviour
 
   def open(device, options), do: SPI.open(device, options)
 

@@ -8,7 +8,7 @@ defmodule Fw.Adapters.SpiTest do
 
   use Agent
 
-  @behaviour Fw.SpiAdapter
+  @behaviour Fw.Adapters.SpiBehaviour
 
   def start_link(_args \\ []) do
     Agent.start_link(fn -> 8283 end, name: __MODULE__)
