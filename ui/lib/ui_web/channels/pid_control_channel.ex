@@ -63,13 +63,7 @@ defmodule UiWeb.PidControlChannel do
         :error -> 0.0
       end
 
-    # IO.puts("Starting the stream")
-    # :ok = Ui.PidControl.start_stream(setpoint, kp, ki, kd)
-    # IO.puts("Started the stream")
-
-    IO.puts("Starting the with loop")
-    :ok = Ui.PidControl.start_with_loop(setpoint, kp, ki, kd)
-    IO.puts("Started the with loop")
+    :ok = Ui.PidControl.start(setpoint, kp, ki, kd)
 
     {:noreply, socket}
   end
@@ -89,9 +83,5 @@ defmodule UiWeb.PidControlChannel do
     })
 
     {:noreply, socket}
-  end
-
-  def parse_attrs(attrs) do
-
   end
 end
