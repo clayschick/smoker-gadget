@@ -1,4 +1,11 @@
 defmodule UiWeb.PidControlChannel do
+  @moduledoc """
+  Channel module for handling control messages from the UI.
+
+  This module talks directly to the Pid.Agent and updates it's
+  dependent state values. There is a certain amount of validation
+  done here since this is the closest to the UI arguments.
+  """
   use Phoenix.Channel
 
   def join("pid:control", _message, socket) do

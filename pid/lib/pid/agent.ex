@@ -28,5 +28,5 @@ defmodule Pid.Agent do
   def update(new_state_fields), do:
     Agent.update(__MODULE__, &struct!(&1, new_state_fields))
 
-  def get_state(), do: Agent.get(__MODULE__, & &1)
+  def get_state, do: Agent.get(__MODULE__, & &1)
 end

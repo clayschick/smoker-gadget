@@ -3,8 +3,10 @@ defmodule Fw.Adapters.PwmTest do
   Specification for a fake PWM adapter.
   """
 
+  alias Fw.Adapters.SpiTest
+
   def adjust(pid_output) do
-    Fw.Adapters.SpiTest.fake_temp_adjustment(pid_output)
+    SpiTest.fake_temp_adjustment(pid_output)
     :ok
   end
 end

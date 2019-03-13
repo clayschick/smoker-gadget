@@ -35,7 +35,7 @@ defmodule Fw.Temperature do
   The configuration (register 0x80) is a one time setup
   for 3-wire config and auto conversion mode.
   """
-  def connect() do
+  def connect do
     config = Application.get_env(:fw, Fw.Temperature, [])
     adapter = config[:spi_adapter] || @default_adapter
     device_bus = config[:device_bus] || @default_device_bus
@@ -64,13 +64,13 @@ defmodule Fw.Temperature do
   > Note that a single conversion requires approximately 52ms
   > in 60Hz filter mode or 62.5ms in 50Hz filter mode to complete.
   """
-  def read() do
+  def read do
     %{ref: ref, adapter: adapter} = Agent.get(__MODULE__, & &1)
 
     {:ok, <<_::size(8), digits::size(15), fault_bit::size(1)>>} =
       adapter.transfer(ref, <<0x01, 0x00, 0x00>>)
 
-    resistance = digits / 32768 * 430
+    resistance = digits / 32_768 * 430
 
     z1 = -3.9083e-3
     z2 = 3.9083e-3 * 3.9083e-3 - 4 * -5.775e-7
@@ -89,7 +89,7 @@ defmodule Fw.Temperature do
   @doc """
   Generates a stream of temperature values.
   """
-  def stream() do
+  def stream do
     Stream.repeatedly(fn -> read() end)
   end
 end

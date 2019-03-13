@@ -1,4 +1,5 @@
 defmodule Fw.Fan do
+  @moduledoc false
 
   @default_adapter Fw.Adapters.Pwm
 

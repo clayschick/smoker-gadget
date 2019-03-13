@@ -1,6 +1,6 @@
 defmodule Pid.Controller do
   @moduledoc """
-  PID Controller
+  PID Controller implementation.
   """
 
   @doc """
@@ -44,7 +44,7 @@ defmodule Pid.Controller do
   Use these functions to handle adapter config stuff and other things
   specific to reading and adjusting the side-effecty things
   """
-  def read(), do: Fw.Temperature.read()
+  def read, do: Fw.Temperature.read()
 
   def adjust(output), do: Fw.Fan.adjust(output)
 
@@ -52,7 +52,7 @@ defmodule Pid.Controller do
   With statement used as an implementation of the read/evaluate/adjust
   cycle. Returns the input and output together to be consumed by the UI.
   """
-  def cycle() do
+  def cycle do
     with {:read, input} <- {:read, read()},
          {:evaluate, output} <- {:evaluate, evaluate(input)},
          {:adjust, :ok} <- {:adjust, adjust(output)},

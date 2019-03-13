@@ -21,11 +21,9 @@ defmodule Fw.Adapters.SpiTest do
 
   @impl true
   def transfer(_ref, _data) do
-    rtd_value =
-      Agent.get(__MODULE__, & &1)
-      |> Kernel.trunc()
+    rtd_value = Agent.get(__MODULE__, & &1)
 
-    {:ok, <<0::size(8), rtd_value::size(15), 0::size(1)>>}
+    {:ok, <<0::size(8), Kernel.trunc(rtd_value)::size(15), 0::size(1)>>}
   end
 
   def fake_temp_adjustment(pid_output) do

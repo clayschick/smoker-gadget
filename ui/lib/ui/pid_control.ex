@@ -8,14 +8,14 @@ defmodule Ui.PidControl do
   Stops the controller and ui update task by setting the
   Ui.Agent.auto to false.
   """
-  def stop(), do: Ui.Agent.set_auto(false)
+  def stop, do: Ui.Agent.set_auto(false)
 
   @doc """
   Starts a Task that will update the UI.
 
   Sets the UI auto state to true.
   """
-  def start() do
+  def start do
     :ok = Ui.Agent.set_auto(true)
 
     {:ok, _} = Task.start(fn -> ui_loop(true) end)
