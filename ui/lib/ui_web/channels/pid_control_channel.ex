@@ -7,6 +7,9 @@ defmodule UiWeb.PidControlChannel do
   end
 
   def handle_in("setpoint_update", %{"setpoint" => setpoint}, socket) do
+    # Should move the to_integer into the server so that it can
+    # crash as an unhandled error and the server will be restarted
+    # instead of this Channel being restarted
     :ok = Pid.Agent.update(setpoint: String.to_integer(setpoint))
 
     # push(socket, "setpoint_updated", %{setpoint: setpoint})
@@ -33,7 +36,33 @@ defmodule UiWeb.PidControlChannel do
   end
 
   def handle_in("start_controller", attrs, socket) do
-    :ok = Ui.PidControl.start(attrs)
+    setpoint =
+      case Integer.parse(attrs["setpoint"]) do
+        {float, _} -> float
+        :error -> 0
+      end
+
+    kp =
+      case Float.parse(attrs["kp"]) do
+        {float, _} -> float
+        :error -> 0.0
+      end
+
+    ki =
+      case Float.parse(attrs["ki"]) do
+        {float, _} -> float
+        :error -> 0.0
+      end
+
+    kd =
+      case Float.parse(attrs["kd"]) do
+        {float, _} -> float
+        :error -> 0.0
+      end
+
+    :ok = Ui.PidControl.start_stream(setpoint, kp, ki, kd)
+
+    # :ok = Ui.PidControl.start(setpoint, kp, ki, kd)
 
     {:noreply, socket}
   end
@@ -53,5 +82,9 @@ defmodule UiWeb.PidControlChannel do
     })
 
     {:noreply, socket}
+  end
+
+  def parse_attrs(attrs) do
+
   end
 end

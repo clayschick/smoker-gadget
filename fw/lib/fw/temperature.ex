@@ -81,7 +81,7 @@ defmodule Fw.Temperature do
     f_temp = temp * 9 / 5 + 32
 
     case fault_bit do
-      1 -> nil
+      1 -> "Fault bit set"
       0 -> f_temp
     end
   end

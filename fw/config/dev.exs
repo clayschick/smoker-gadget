@@ -1,5 +1,9 @@
 use Mix.Config
 
+config :logger, :console,
+  format: "[$level] $message\n",
+  level: :debug
+
 config :fw, Fw.Temperature,
   spi_adapter: Fw.Adapters.SpiTest,
   pwm_adapter: Fw.Adapters.PwmTest

@@ -16,6 +16,7 @@ defmodule Ui.Application do
       # the controller task from the UI
       # {Task.Supervisor, name: Ui.TaskSupervisor}
       {Registry, keys: :unique, name: Ui.Registry}
+      # {Ui.PidServer}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
