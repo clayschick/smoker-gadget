@@ -60,7 +60,8 @@ defmodule Fw.MixProject do
     [
       {:nerves_runtime, "~> 0.6"},
       {:nerves_init_gadget, "~> 0.4"},
-      {:circuits_spi, "~> 0.1"}
+      {:circuits_spi, "~> 0.1"},
+      {:pigpiox, "~> 0.1.2"}
     ] ++ system(target)
   end
 

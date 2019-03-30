@@ -64,14 +64,12 @@ In the adafruit python libray they:
 
 ## App design
 
-The SPI and PWM modules are just modules (they are not GenServers or anything special) that I can load up as two Tasks since there is no state to store that must be accessed by different processes or by the same process at different points in time. I don't need to call Agent functions like `get_and_update` to affect state.
-
-They could each be a supervised task.
+Need to update
 
 
 ## App development
 
-Current development commancd:
+Current development command:
 
 ```elixir
 MIX_TARGET=rpi0 MIX_ENV=prod mix firmware && ./upload.sh 172.30.52.241 ./_build/rpi0/rpi0_prod/nerves/images/fw.fw
@@ -284,7 +282,11 @@ I added Nerves.Runtime.Shell as a dependency which gives you basic shell access 
 iex(1)> Nerves.Runtime.Shell.start
 ```
 
-Can also see the start-up log using RingLogger
+#### Logging
+
+Can also see the start-up log using RingLogger.
+
+Or just log out in general from the console.
 
 ```elixir
 iex(1)> RingLogger.next

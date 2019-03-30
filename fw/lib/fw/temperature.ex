@@ -11,6 +11,8 @@ defmodule Fw.Temperature do
   """
   use Agent
 
+  require Logger
+
   # alias Circuits.SPI
 
   @default_adapter Fw.Adapters.Spi
@@ -79,6 +81,8 @@ defmodule Fw.Temperature do
     temp = z2 + z3 * resistance
     temp = (:math.sqrt(temp) + z1) / z4
     f_temp = temp * 9 / 5 + 32
+
+    Logger.debug("Temperature: #{f_temp}")
 
     case fault_bit do
       1 -> "Fault bit set"

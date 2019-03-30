@@ -5,6 +5,8 @@ defmodule Pid.Application do
 
   use Application
 
+  require Logger
+
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [

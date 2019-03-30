@@ -3,6 +3,8 @@ defmodule Pid.Controller do
   PID Controller implementation.
   """
 
+  require Logger
+
   @doc """
   The controller function that evaluates an output value to be applied to
   something that will adjust the input.
@@ -61,9 +63,9 @@ defmodule Pid.Controller do
     else
       # Can pattern match on the error to be more specific
       # Need to send the message to the Logger
-      {:read, msg} -> {:error, "Error while reading input - #{msg}"}
-      {:evaluate, msg} -> {:error, "Error while evaluating - #{msg}"}
-      {:adjust, msg} -> {:error, "Error while adjusting - #{msg}"}
+      {:read, msg} -> {:error, "Error while reading input - #{msg}"} |> Logger.error
+      {:evaluate, msg} -> {:error, "Error while evaluating - #{msg}"} |> Logger.error
+      {:adjust, msg} -> {:error, "Error while adjusting - #{msg}"} |> Logger.error
     end
   end
 end
