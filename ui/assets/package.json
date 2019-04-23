@@ -6,9 +6,8 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
-    "c3": "^0.6.12",
     "chart.js": "^2.7.3",
-    "epoch-charting": "^0.8.4",
+    "chartjs-plugin-streaming": "^1.8.0",
     "moment": "^2.24.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html"

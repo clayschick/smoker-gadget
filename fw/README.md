@@ -77,6 +77,17 @@ Current development commancd:
 MIX_TARGET=rpi0 MIX_ENV=prod mix firmware && ./upload.sh 172.30.52.241 ./_build/rpi0/rpi0_prod/nerves/images/fw.fw
 ```
 
+Rebuild the UI assets using this command from the ui/assets directory:
+
+```elixir
+npm run deploy
+```
+
+If this is a fresh clone of the app run `mix deps.get` from the ui dir so that the phoenix dep is installed.
+
+Also run `npm install`.
+
+
 This is build uses the _nerves_init_gadget_ - https://github.com/nerves-project/nerves_init_gadget
 
 Pretty much just followed the instructions for a new project.
