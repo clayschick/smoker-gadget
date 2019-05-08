@@ -41,11 +41,14 @@ In the adafruit python libray they:
 
 ### What to do next
 
+- setup the Pi to use WIFI
+- fix the livereload
+- write some unit tests
 - build the docs
-- design the app
-- figure out a way to profile a Nerves app - e.g. what is the CPU usage
-- buy a PWM fan like the Corsair SL series
-- find a box to put it all in and a way to hook into the grill
+- design the app - Done, but is this ever really done?
+- figure out a way to profile a Nerves app - Done, can use observer over remote console
+- buy a PWM fan like the Corsair SL series - Done
+- find a box to put it all in and a way to hook into the grill - Try a cardboard box first
 
 ## 12v fan driver - or I could just buy one - I bought one
 
@@ -55,11 +58,11 @@ In the adafruit python libray they:
 
 ### Parts list
 
-- Q1: any small N-channel MOSFET (e.g. 2N7000/BS170)
-- C1: 0.1 uF electrolytic capacitor
+- Q1: any small N-channel MOSFET (e.g. 2N7000/BS170) _have some sort of MOSFET_
+- C1: 0.1 uF electrolytic capacitor _think I have it_
 - R1: 10 kΩ resistor - _have it_
 - D1: Any small rectifier diode - _have it_
-- 12v lifepo4 battery pack
+- 12v power supply or lifepo4 battery pack
 - 12v PWM fan (like Corsair SL120 or something with high static pressure) or blower fan
 
 ## App design
@@ -102,9 +105,11 @@ $ mix nerves.new smokergadget --init-gadget
 $ mix deps.get
 $ mix firmware
 $ mix firmware.burn
+OR
+$ mix firmware.burn -d /dev/sdb
 ```
 
-Then stick the card in and boot using the USB console cable w/power. This is a special cable!
+Then stick the card in and boot using the USB console cable w/power.
 
 Can also run a super command:
 ```
