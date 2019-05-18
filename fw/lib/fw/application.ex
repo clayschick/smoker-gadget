@@ -25,7 +25,8 @@ defmodule Fw.Application do
 
   def children(_target) do
     [
-      Fw.Temperature
+      Fw.Temperature,
+      Fw.Light
     ]
   end
 end

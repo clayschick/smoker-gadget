@@ -1,6 +1,6 @@
 defmodule Fw.Adapters.Spi do
   @moduledoc """
-  Specification for an SPI adapter.
+  Specification for a production SPI adapter.
   """
 
   alias Circuits.SPI

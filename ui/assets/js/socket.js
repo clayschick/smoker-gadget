@@ -169,6 +169,19 @@ channel.on("controller_updated", payload => {
   outputInput.value = output
   input = payload.input
   inputInput.value = input
+
+  var current_time = Date.now()
+
+  // Update the setpoint control
+  chart.config.data.datasets[0].data.push({ x: current_time, y: setPointValue() })
+
+  // Update the output control
+  chart.config.data.datasets[1].data.push({ x: current_time, y: payload.input })
+
+  // update chart datasets keeping the current animation
+  chart.update({
+      preservation: true
+  });
 })
 
 // Chart - need to move all this to it's own module
@@ -245,8 +258,8 @@ var chart = new Chart(ctx, {
         realtime: {
           duration: 40000,
           refresh: 500, // this needs to be faster than the controller loop
-          delay: 2000,
-          onRefresh: onRefresh
+          delay: 2500 //,
+          // onRefresh: onRefresh
         }
       }],
       yAxes: [{
@@ -255,7 +268,7 @@ var chart = new Chart(ctx, {
         },
         ticks: {
           min: 0,
-          max: 100
+          max: 250
         }
       }]
     },
@@ -264,7 +277,7 @@ var chart = new Chart(ctx, {
         borderWidth: 2,
         fill: false,
         tension: 0.3,
-        stepped: true
+        stepped: false
       },
       point: {
         radius: 0

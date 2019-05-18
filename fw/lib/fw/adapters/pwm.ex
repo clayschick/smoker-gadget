@@ -1,6 +1,6 @@
 defmodule Fw.Adapters.Pwm do
   @moduledoc """
-  Specification for a PWM adapter.
+  Specification for a production PWM adapter.
   """
 
   alias Pigpiox.Pwm
@@ -10,14 +10,20 @@ defmodule Fw.Adapters.Pwm do
   # I shall abide by the adapter rules
   @behaviour Fw.Adapters.PwmBehaviour
 
+  # This need to accept a multiplier value
   def adjust(pid_output) do
     Logger.debug("pid_output: #{pid_output}")
-    # First arg is the frequency (makes it blink) - 0Hz to 100Hz (seems to be always on)
-    # Second arg is the dutycycle - 0% to 100% (always on)
-    # - this is what I will adjust with the pid_output
-    # Pwm.hardware_pwm(12, 8000, 10000)
-    # Pwm.hardware_pwm(12, 100, 900000) <-- this is super bright
-    Pwm.hardware_pwm(12, 100, Kernel.trunc(pid_output) * 10)
-    pid_output
+
+    adjustment_variable =
+      cond do
+        pid_output < 0 -> 0
+        true -> Kernel.trunc(pid_output)
+      end
+
+    Logger.debug("adjustment_variable: #{adjustment_variable}")
+
+    Pwm.hardware_pwm(18, 100, adjustment_variable)
+
+    adjustment_variable
   end
 end

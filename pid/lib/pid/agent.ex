@@ -14,6 +14,7 @@ defmodule Pid.Agent do
               last_time: 0,
               last_input: 0,
               last_output: 0,
+              last_error: 0,
               i_term: 0
   end
 
@@ -29,4 +30,6 @@ defmodule Pid.Agent do
     Agent.update(__MODULE__, &struct!(&1, new_state_fields))
 
   def get_state, do: Agent.get(__MODULE__, & &1)
+
+  def reset, do: Agent.update(__MODULE__, fn state -> %State{} end)
 end

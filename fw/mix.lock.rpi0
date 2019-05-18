@@ -2,6 +2,8 @@
   "artificery": {:hex, :artificery, "0.4.0", "e0b8d3eb9dfe8f42c08a620f90a2aa9cef5dba9fcdfcecad5c2be451df159a77", [:mix], [], "hexpm"},
   "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm"},
   "certifi": {:hex, :certifi, "2.4.2", "75424ff0f3baaccfd34b1214184b6ef616d89e420b258bb0a5ea7d7bc628f7f0", [:rebar3], [{:parse_trans, "~>3.3", [hex: :parse_trans, repo: "hexpm", optional: false]}], "hexpm"},
+  "circuits_gpio": {:hex, :circuits_gpio, "0.3.1", "bfbc01bba0de0d820ee5cc60593d809095f10922f65de8bde26795790d830250", [:make, :mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
+  "circuits_i2c": {:hex, :circuits_i2c, "0.3.1", "0247c6fe777fb608a1a6b4690b4ff8ce48e22cca94c5a248c9d4f696af03380c", [:make, :mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
   "circuits_spi": {:hex, :circuits_spi, "0.1.0", "b17271a89d253f0d81ba4f74f6523492fcd9edfb325c5efb5c40d6f77e45f421", [:make, :mix], [{:elixir_make, "~> 0.4", [hex: :elixir_make, repo: "hexpm", optional: false]}], "hexpm"},
   "combine": {:hex, :combine, "0.10.0", "eff8224eeb56498a2af13011d142c5e7997a80c8f5b97c499f84c841032e429f", [:mix], [], "hexpm"},
   "cowboy": {:hex, :cowboy, "2.6.1", "f2e06f757c337b3b311f9437e6e072b678fcd71545a7b2865bdaa154d078593f", [:rebar3], [{:cowlib, "~> 2.7.0", [hex: :cowlib, repo: "hexpm", optional: false]}, {:ranch, "~> 1.7.1", [hex: :ranch, repo: "hexpm", optional: false]}], "hexpm"},
