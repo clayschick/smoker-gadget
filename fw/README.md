@@ -42,9 +42,10 @@ In the adafruit python libray they:
 ### What to do next
 
 - setup the Pi to use WIFI
-- fix the livereload
+- add an output graph to the UI
 - write some unit tests
 - build the docs
+- fix the livereload
 - design the app - Done, but is this ever really done?
 - figure out a way to profile a Nerves app - Done, can use observer over remote console
 - buy a PWM fan like the Corsair SL series - Done
@@ -74,7 +75,15 @@ They could each be a supervised task.
 
 ## App development
 
-Current development commancd:
+Development run command:
+
+```elixir
+MIX_TARGET=host MIX_ENV=dev iex -S mix
+```
+
+Webpack will run as long as npm is available to run the node server
+
+Current compile and deploy command:
 
 ```elixir
 MIX_TARGET=rpi0 MIX_ENV=prod mix firmware && ./upload.sh 172.30.52.241 ./_build/rpi0/rpi0_prod/nerves/images/fw.fw
@@ -91,7 +100,7 @@ If this is a fresh clone of the app run `mix deps.get` from the ui dir so that t
 Also run `npm install`.
 
 
-This is build uses the _nerves_init_gadget_ - https://github.com/nerves-project/nerves_init_gadget
+This build uses the _nerves_init_gadget_ - https://github.com/nerves-project/nerves_init_gadget
 
 Pretty much just followed the instructions for a new project.
 

@@ -25,8 +25,11 @@ defmodule Pid.Agent do
   def start_link(_option_list \\ []), do:
     Agent.start_link(fn -> %State{} end, name: __MODULE__)
 
-  def update(new_state_fields), do:
+  def update(new_state_fields) do
     Agent.update(__MODULE__, &struct!(&1, new_state_fields))
+  end
 
   def get_state(), do: Agent.get(__MODULE__, & &1)
+
+  def reset(), do: Agent.update(__MODULE__, fn _ -> %State{} end)
 end

@@ -3,6 +3,8 @@ defmodule Pid.Controller do
   PID Controller
   """
 
+  require Logger
+
   @doc """
   The controller function that evaluates an output value to be applied to
   something that will adjust the input.
@@ -19,6 +21,8 @@ defmodule Pid.Controller do
 
     error = state.setpoint - input
 
+    Logger.debug("Error: #{error}")
+
     # accumulation_of_error = state.accumulation_of_error + error * time_delta
 
     integral = state.i_term + state.ki * error
@@ -27,6 +31,8 @@ defmodule Pid.Controller do
 
     # output = state.kp * error + state.ki * accumulation_of_error - state.kd * derivative_of_input
     output = state.kp * error + integral - state.kd * derivative_of_input
+
+    Logger.debug("PID Output: #{output}")
 
     :ok =
       Pid.Agent.update(
@@ -82,9 +88,9 @@ defmodule Pid.Controller do
     else
       # Can pattern match on the error to be more specific
       # Need to send the message to the Logger
-      {:read, msg} -> {:error, "Error while reading input - #{msg}"}
-      {:evaluate, msg} -> {:error, "Error while evaluating - #{msg}"}
-      {:adjust, msg} -> {:error, "Error while adjusting - #{msg}"}
+      {:read, msg} -> "Error while reading input - #{msg}" |> Logger.error
+      {:evaluate, msg} -> "Error while evaluating - #{msg}" |> Logger.error
+      {:adjust, msg} -> "Error while adjusting - #{msg}" |> Logger.error
     end
   end
 

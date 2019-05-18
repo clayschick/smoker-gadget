@@ -8,6 +8,9 @@ defmodule Fw.Application do
   use Application
 
   def start(_type, _args) do
+    # PWM fans run when there is no voltage on the PWM pin
+    # Need to stop the running fan when the app starts
+    Fw.Fan.stop
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Fw.Supervisor]

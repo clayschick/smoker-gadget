@@ -7,4 +7,6 @@ defmodule Fw.Adapters.PwmTest do
     Fw.Adapters.SpiTest.fake_temp_adjustment(pid_output)
     :ok
   end
+
+  def stop(), do: :ok
 end
