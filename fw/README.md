@@ -309,10 +309,24 @@ I added Nerves.Runtime.Shell as a dependency which gives you basic shell access 
 iex(1)> Nerves.Runtime.Shell.start
 ```
 
-Can also see the start-up log using RingLogger
+### Logging
+
+Using [RingLogger](https://github.com/nerves-project/ring_logger) which allows logging in a remote shell which `:console` cannot do.
+
+To see log messages in the console use the `attach\0` and `detach\0` functions.
+
+Or use these when unattached:
 
 ```elixir
 iex(1)> RingLogger.next
+```
+
+```elixir
+iex(1)> RingLogger.tail
+```
+
+```elixir
+iex(1)> RingLogger.grep(~r/[Ee]rror/)
 ```
 
 ### If Application won't start
