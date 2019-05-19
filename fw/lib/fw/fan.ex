@@ -5,7 +5,7 @@ defmodule Fw.Fan do
   @default_adapter Fw.Adapters.Pwm
 
   def adjust(pid_output) do
-    config = Application.get_env(:fw, Fw.Temperature, [])
+    config = Application.get_env(:fw, Fw.Fan, [])
     adapter = config[:pwm_adapter] || @default_adapter
 
     # The fan does not start and stop at the same frequency.
@@ -22,7 +22,7 @@ defmodule Fw.Fan do
   end
 
   def stop do
-    config = Application.get_env(:fw, Fw.Temperature, [])
+    config = Application.get_env(:fw, Fw.Fan, [])
     adapter = config[:pwm_adapter] || @default_adapter
 
     adapter.stop()

@@ -1,4 +1,11 @@
 defmodule UiWeb.PidControlChannel do
+  @moduledoc """
+  Channel module for handling control messages from the UI.
+
+  This module talks directly to the Pid.Agent and updates it's
+  dependent state values. There is a certain amount of validation
+  done here since this is the closest to the UI arguments.
+  """
   use Phoenix.Channel
 
   def join("pid:control", _message, socket) do
@@ -63,13 +70,15 @@ defmodule UiWeb.PidControlChannel do
         :error -> 0.0
       end
 
-    # IO.puts("Starting the stream")
-    # :ok = Ui.PidControl.start_stream(setpoint, kp, ki, kd)
-    # IO.puts("Started the stream")
+    :ok =
+      Pid.Agent.update(
+        setpoint: setpoint,
+        kp: kp,
+        ki: ki,
+        kd: kd
+      )
 
-    IO.puts("Starting the with loop")
-    :ok = Ui.PidControl.start_with_loop(setpoint, kp, ki, kd)
-    IO.puts("Started the with loop")
+    :ok = Ui.PidControl.start()
 
     {:noreply, socket}
   end
@@ -89,9 +98,5 @@ defmodule UiWeb.PidControlChannel do
     })
 
     {:noreply, socket}
-  end
-
-  def parse_attrs(attrs) do
-
   end
 end

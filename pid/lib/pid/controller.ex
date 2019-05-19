@@ -1,6 +1,6 @@
 defmodule Pid.Controller do
   @moduledoc """
-  PID Controller
+  PID Controller Implementation
   """
 
   require Logger
@@ -54,32 +54,12 @@ defmodule Pid.Controller do
 
   def adjust(output), do: Fw.Fan.adjust(output)
 
-
-  @doc """
-  Returns an infinite generative Stream that can be reduced on
-  to lazily return the result of the read/evaluate/adjust cycle.
-
-  Sets an initial state used by the evaluate function.
-  """
-  def eval_stream() do
-    now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
-    current_temp = Fw.Temperature.read()
-
-    :ok =
-      Pid.Agent.update(
-        last_time: now,
-        last_input: current_temp
-      )
-
-    Stream.repeatedly(fn -> run_with() end)
-  end
-
   @doc """
   With statement used as an implementation of the
   read/evaluate/adjust cycle. Returns the input and
   output together to be consumed by the UI.
   """
-  def run_with() do
+  def cycle() do
     with {:read, input} <- {:read, read()},
          {:evaluate, output} <- {:evaluate, evaluate(input)},
          {:adjust, :ok} <- {:adjust, adjust(output)},
@@ -92,38 +72,5 @@ defmodule Pid.Controller do
       {:evaluate, msg} -> "Error while evaluating - #{msg}" |> Logger.error
       {:adjust, msg} -> "Error while adjusting - #{msg}" |> Logger.error
     end
-  end
-
-  @doc """
-  Used to start the controller's read/evaluate/adjust pipeline loop.
-
-  Sets an initial state to be used by the functions in the pipeline.
-  """
-  def run() do
-    now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
-    current_temp = Fw.Temperature.read()
-
-    :ok =
-      Pid.Agent.update(
-        last_time: now,
-        last_input: current_temp
-      )
-
-    eval_loop(%{auto: true})
-  end
-
-  defp eval_loop(%{auto: false}), do: :ok
-
-  defp eval_loop(%{auto: true}) do
-    read()
-    |> evaluate()
-    |> adjust()
-
-    # Again with these timers in a loop!
-    Process.sleep(500)
-
-    state = Pid.Agent.get_state()
-
-    eval_loop(%{auto: state.auto})
   end
 end

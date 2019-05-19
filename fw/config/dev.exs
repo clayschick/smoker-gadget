@@ -5,7 +5,9 @@ config :logger, :console,
   level: :debug
 
 config :fw, Fw.Temperature,
-  spi_adapter: Fw.Adapters.SpiTest,
+  spi_adapter: Fw.Adapters.SpiTest
+
+config :fw, Fw.Fan,
   pwm_adapter: Fw.Adapters.PwmTest
 
 config :ui, UiWeb.Endpoint,
