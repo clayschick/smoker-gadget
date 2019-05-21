@@ -2,20 +2,31 @@
 
 ## Notes
 
-I can finally set and read the config using the Circuits.SPI module.
+### What to do next
 
-```
-iex(smokergadget@nerves.local)1> {:ok, ref} = Circuits.SPI.open("spidev0.0", mode: 1, speed_hz: 500_000)
-{:ok, #Reference<0.377658555.268828680.198910>}
-iex(smokergadget@nerves.local)2> Circuits.SPI.transfer(ref, <<0x00, 0x00>>)
-{:ok, <<0, 0>>}
-iex(smokergadget@nerves.local)3> Circuits.SPI.transfer(ref, <<0x80, 0x90>>)
-{:ok, <<0, 0>>}
-iex(smokergadget@nerves.local)4> Circuits.SPI.transfer(ref, <<0x00, 0x00>>)
-{:ok, <<0, 144>>}
-```
+- write some unit tests
+- setup the Pi to use WIFI
+- add an output graph to the UI
+- find a box to put it all in and a way to hook into the grill - Try a cardboard box first
+- keep updating the module and function docs
+- add specs and dialyix
+- add more configuration 
+-- PWM pin and frequency
+-- pid_out multiplier
+- add callbacks to PWM behaviour module and implement in the PWM module
+- fix the livereload - don't know if I care
 
-Can read the RTD like so:
+- build the docs and cleanup any exposed private or adapter modules - Done
+- design the app - Done, but is this ever really done?
+- figure out a way to profile a Nerves app - Done, can use observer over remote console
+- buy a PWM fan like the Corsair SL series - Done
+
+
+#### Reading from the RTD
+
+The below example is setting the config register (0x80) and then reading from the data register (0x01).
+
+Also, note the extra 8-bits of binary in the read transfer because I have to send as many bytes as I expect to receive and the RTD returns an extra byte at the beginning of the return binary.
 
 ```
 iex(smokergadget@nerves.local)8> Circuits.SPI.transfer(ref, <<0x80, 0xB0>>)
@@ -28,10 +39,6 @@ iex(smokergadget@nerves.local)11> Circuits.SPI.transfer(ref, <<0x01, 0x00, 0x00>
 {:ok, <<0, 64, 192>>}
 ```
 
-144 = Initial config value
-146 = Clear faults config value
-176 = One-Shot read config value
-
 In the adafruit python libray they:
 - clear the faults by writting 146 to the config register
 - sets the bias to true by writting 144 to the config register
@@ -39,19 +46,7 @@ In the adafruit python libray they:
 - configure the chip for a one-shot data read by writting 176 to the config register
 - read 16bits from register 0x01
 
-### What to do next
-
-- setup the Pi to use WIFI
-- add an output graph to the UI
-- write some unit tests
-- build the docs
-- fix the livereload
-- design the app - Done, but is this ever really done?
-- figure out a way to profile a Nerves app - Done, can use observer over remote console
-- buy a PWM fan like the Corsair SL series - Done
-- find a box to put it all in and a way to hook into the grill - Try a cardboard box first
-
-## 12v fan driver - or I could just buy one - I bought one
+## 12v fan driver
 
 ### Scematic
 
@@ -139,7 +134,7 @@ iex(15)> Nerves.Runtime.halt
 
 See https://github.com/nerves-project/nerves_init_gadget#configuration
 
-## Network access
+## Network Access
 
 It took a few tries before I was able to get a response from `ping nerves.local`
 
@@ -150,7 +145,30 @@ ssh nerves.local
 To exit the SSH session, type `~.`
 
 
-## Remote shell
+## Network Deployment
+
+I had to use the `upload.sh` script from nerves_firmware_ssh
+
+```
+$ mix firmware.gen.script
+```
+
+To deploy the changes do:
+```
+$ mix firmware
+$ ./upload.sh <destination IP>
+```
+- Get the destination IP from the `ping` response - can also try using `nerves.local`
+- Second arg is file path that defaults to the right place - `find . -name smokergadget.fw`
+
+### Remote Update - Does not work without nerves_firmware_http which conflicts with nerves_firmware_ssh
+
+POST the `_images/rpi3/fw.fw` file to `<board's ip>:8988/firmware'`. Example (using [httpie](https://httpie.org/)):
+```
+http POST 172.30.52.241:8988/firmware content-type:application/x-firmware x-reboot:true < _build/rpi0/dev/nerves/images/smokergadget.fw
+```
+
+## Remote Shell
 
 Change `rel/vm.args` to:
 
@@ -189,29 +207,6 @@ iex --name host@172.30.52.242 --remsh smokergadget@nerves.local --cookie secret
 You will drop to the board's shell.
 
 NOTE: the IP of the host is the local IP assigned to the usb gadget `en` network found when running `ifconfig`
-
-## Network Firmware Deployment
-
-I had to use the `upload.sh` script from nerves_firmware_ssh
-
-```
-$ mix firmware.gen.script
-```
-
-To deploy the changes do:
-```
-$ mix firmware
-$ ./upload.sh <destination IP>
-```
-- Get the destination IP from the `ping` response - can also try using `nerves.local`
-- Second arg is file path that defaults to the right place - `find . -name smokergadget.fw`
-
-### Remote Update - Does not work without nerves_firmware_http which conflicts with nerves_firmware_ssh
-
-POST the `_images/rpi3/fw.fw` file to `<board's ip>:8988/firmware'`. Example (using [httpie](https://httpie.org/)):
-```
-http POST 172.30.52.241:8988/firmware content-type:application/x-firmware x-reboot:true < _build/rpi0/dev/nerves/images/smokergadget.fw
-```
 
 ## Pigpiox Library
 
@@ -313,7 +308,7 @@ iex(1)> Nerves.Runtime.Shell.start
 
 Using [RingLogger](https://github.com/nerves-project/ring_logger) which allows logging in a remote shell which `:console` cannot do.
 
-To see log messages in the console use the `attach\0` and `detach\0` functions.
+To see log messages in the console use the `RingLogger.attach\0` and `RingLogger.detach\0` functions.
 
 Or use these when unattached:
 
@@ -367,11 +362,11 @@ iex(smokergadget@nerves.local)1> Application.ensure_all_started(:smokergadget)
   * Discussion Slack elixir-lang #nerves ([Invite](https://elixir-slackin.herokuapp.com/))
   * Source: https://github.com/nerves-project/nerves
 
-## Don't learn more
+## Mistakes
 
-### This section is for the things that I tried and didn't work
+## PWM overlay
 
-## Setup the PWM overlay - NOTE: Don't need none of the shit in this section!
+NOTE: Don't need none of the shit in this section!
 
 Just use a regular old firmware version for rpi0.
 

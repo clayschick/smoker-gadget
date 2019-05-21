@@ -16,7 +16,16 @@ defmodule Fw.MixProject do
       start_permanent: Mix.env() == :prod,
       build_embedded: @target != "host",
       aliases: [loadconfig: [&bootstrap/1]],
-      deps: deps()
+      deps: deps(),
+      # Docs
+      name: "Fw",
+      source_url: "https://github.com/clayschick/smoker-gadget",
+      # homepage_url: "http://YOUR_PROJECT_HOMEPAGE",
+      docs: [
+        main: "Fw", # The main page in the docs
+        # logo: "path/to/logo.png",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -51,7 +60,7 @@ defmodule Fw.MixProject do
   # Specify target specific dependencies
   defp deps("host") do
     [
-
+      {:ex_doc, "~> 0.20", only: :dev, runtime: false}
     ]
   end
 

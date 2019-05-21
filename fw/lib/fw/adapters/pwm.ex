@@ -1,17 +1,10 @@
 defmodule Fw.Adapters.Pwm do
-  @moduledoc """
-
-  """
-  require Logger
+  @moduledoc false
 
   alias Pigpiox.Pwm
 
-  def adjust(frequency, duty_cycle) do
-    # Need to make these args configurable
-    Pigpiox.Pwm.hardware_pwm(18, frequency, duty_cycle)
-  end
+  # Need to make these args configurable
+  def adjust(frequency, duty_cycle), do: Pwm.hardware_pwm(18, frequency, duty_cycle)
 
-  def stop do
-    Pigpiox.Pwm.hardware_pwm(18, 25_000, 0)
-  end
+  def stop, do: Pwm.hardware_pwm(18, 25_000, 0)
 end

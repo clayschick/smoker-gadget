@@ -1,10 +1,5 @@
 defmodule Fw.Adapters.SpiTest do
-  @moduledoc """
-  Specification for a fake SPI adapter.
-
-  I'm using an Agent whose state value is meant to represent
-  the value returned from the RTD.
-  """
+  @moduledoc false
 
   use Agent
 
