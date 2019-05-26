@@ -5,6 +5,9 @@
 ### What to do next
 
 - write some unit tests
+-- test the PID controller output
+-- test the Temperature read?
+-- test the Fan adjustment?
 - add specs and dialyix
 - setup the Pi to use WIFI
 - add an output graph to the UI

@@ -6,7 +6,7 @@ defmodule Fw.Adapters.SpiTest do
   @behaviour Fw.Adapters.SpiBehaviour
 
   def start_link(_args \\ []) do
-    IO.puts("Starting the test agent")
+    # This is 72.17413285784122 degrees
     Agent.start_link(fn -> 8283 end, name: __MODULE__)
   end
 

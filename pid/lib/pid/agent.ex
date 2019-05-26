@@ -22,14 +22,18 @@ defmodule Pid.Agent do
   @doc """
   Use Keyword.fetch!/2 for required fields in the options list
   """
-  def start_link(_option_list \\ []), do:
-    Agent.start_link(fn -> %State{} end, name: __MODULE__)
+  def start_link(_option_list \\ []), do: Agent.start_link(fn -> %State{} end, name: __MODULE__)
 
-  def update(new_state_fields) do
-    Agent.update(__MODULE__, &struct!(&1, new_state_fields))
+  def update(new_state_fields), do: Agent.update(__MODULE__, &struct!(&1, new_state_fields))
+
+  def get_state, do: Agent.get(__MODULE__, & &1)
+
+  def reset, do: Agent.update(__MODULE__, fn _ -> %State{} end)
+
+  def init(sp, kp, ki, kd) do
+    now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
+    current_temp = Fw.Temperature.read()
+
+    update(setpoint: sp, kp: kp, ki: ki, kd: kd, last_time: now, last_input: current_temp)
   end
-
-  def get_state(), do: Agent.get(__MODULE__, & &1)
-
-  def reset(), do: Agent.update(__MODULE__, fn _ -> %State{} end)
 end

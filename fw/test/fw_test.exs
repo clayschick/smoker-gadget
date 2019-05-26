@@ -2,7 +2,18 @@ defmodule FwTest do
   use ExUnit.Case
   doctest Fw
 
-  test "greets the world" do
-    assert Fw.hello() == :world
+  test "PID controller output" do
+    expected_output = 4.369400356619089
+    temp = 72.17413285784122
+    setpoint = 78
+    kp = 0.5
+    ki = 0.25
+    kd = 0.25
+
+    # The pid_control_channel in the UI sets the PID state like this
+    # when it handles the controller start message
+    :ok = Pid.Agent.init(setpoint, kp, ki, kd)
+
+    assert expected_output == Pid.Controller.evaluate(temp)
   end
 end

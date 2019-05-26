@@ -38,9 +38,9 @@ defmodule Fw.Temperature do
   def connect do
     config = Application.get_env(:fw, Fw.Temperature, [])
     adapter = config[:spi_adapter] || @default_adapter
-    device_bus = config[:device_bus] || @default_device_bus
-    mode = config[:mode] || @default_mode
-    speed_hz = config[:speed_hz] || @default_speed_hz
+    device_bus = config[:spi_device_bus] || @default_device_bus
+    mode = config[:spi_mode] || @default_mode
+    speed_hz = config[:spi_speed_hz] || @default_speed_hz
 
     {:ok, ref} = adapter.open(device_bus, mode: mode, speed_hz: speed_hz)
 
