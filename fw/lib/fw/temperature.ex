@@ -35,7 +35,7 @@ defmodule Fw.Temperature do
   The configuration (register 0x80) is a one time setup
   for 3-wire config and auto conversion mode.
   """
-  def connec do
+  def connect do
     config = Application.get_env(:fw, Fw.Temperature, [])
     adapter = config[:spi_adapter] || @default_adapter
     device_bus = config[:device_bus] || @default_device_bus

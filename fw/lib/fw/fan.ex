@@ -17,16 +17,18 @@ defmodule Fw.Fan do
   require Logger
 
   @default_adapter Fw.Adapters.Pwm
+  @default_multiplier 1000
 
   def adjust(pid_output) do
     config = Application.get_env(:fw, Fw.Fan, [])
     adapter = config[:pwm_adapter] || @default_adapter
+    pwm_frequency_multiplier = config[:pwm_frequency_multiplier] || @default_multiplier
 
-    level = min(pid_output * 1000, 1_000_000)
+    level = min(pid_output * pwm_frequency_multiplier, 1_000_000)
 
     Logger.debug("PWM duty_cycle level: #{level}")
 
-    case adapter.set_duty_cycle(trunc(level) do
+    case adapter.set_duty_cycle(trunc(level)) do
       :ok -> :ok
       {:error, msg} -> Logger.error(msg)
     end

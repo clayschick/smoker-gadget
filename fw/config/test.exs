@@ -6,4 +6,5 @@ config :fw, Fw.Temperature,
 config :fw, Fw.Fan,
   pwm_adapter: Fw.Adapters.PwmTest,
   pwm_pin: 18,
-  pwm_frequency: 25_000
+  pwm_frequency: 25_000,
+  pwm_frequency_multiplier: 1000

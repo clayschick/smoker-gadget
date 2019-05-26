@@ -11,11 +11,12 @@
 - keep updating the module and function docs
 - add specs and dialyix
 - add more configuration 
--- PWM pin and frequency
+-- PWM pin and frequency - Done
 -- pid_out multiplier
-- add callbacks to PWM behaviour module and implement in the PWM module
+
 - fix the livereload - don't know if I care
 
+- add callbacks to PWM behaviour module and implement in the PWM module - Done
 - build the docs and cleanup any exposed private or adapter modules - Done
 - design the app - Done, but is this ever really done?
 - figure out a way to profile a Nerves app - Done, can use observer over remote console
