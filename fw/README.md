@@ -5,17 +5,17 @@
 ### What to do next
 
 - write some unit tests
+- add specs and dialyix
 - setup the Pi to use WIFI
 - add an output graph to the UI
 - find a box to put it all in and a way to hook into the grill - Try a cardboard box first
 - keep updating the module and function docs
-- add specs and dialyix
-- add more configuration 
--- PWM pin and frequency - Done
--- pid_out multiplier
 
 - fix the livereload - don't know if I care
 
+- add more configuration - Done
+-- PWM pin and frequency
+-- pid_out multiplier
 - add callbacks to PWM behaviour module and implement in the PWM module - Done
 - build the docs and cleanup any exposed private or adapter modules - Done
 - design the app - Done, but is this ever really done?
