@@ -6,6 +6,7 @@ defmodule Fw.Adapters.SpiTest do
   @behaviour Fw.Adapters.SpiBehaviour
 
   def start_link(_args \\ []) do
+    IO.puts("Starting the test agent")
     Agent.start_link(fn -> 8283 end, name: __MODULE__)
   end
 
@@ -18,7 +19,7 @@ defmodule Fw.Adapters.SpiTest do
   def transfer(_ref, _data) do
     rtd_value =
       Agent.get(__MODULE__, & &1)
-      |> Kernel.trunc()
+      |> trunc
 
     {:ok, <<0::size(8), rtd_value::size(15), 0::size(1)>>}
   end

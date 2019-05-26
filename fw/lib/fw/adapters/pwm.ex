@@ -3,8 +3,20 @@ defmodule Fw.Adapters.Pwm do
 
   alias Pigpiox.Pwm
 
-  # Need to make these args configurable
-  def adjust(frequency, duty_cycle), do: Pwm.hardware_pwm(18, frequency, duty_cycle)
+  @behaviour Fw.Adapters.PwmBehaviour
 
-  def stop, do: Pwm.hardware_pwm(18, 25_000, 0)
+  @default_pin 18
+  @default_frequency 25_000
+
+  @impl true
+  def set_duty_cycle(level \\ 0) do
+    config = Application.get_env(:fw, Fw.Fan, [])
+    pin = config[:pwm_pin] || @default_pin
+    frequency = config[:pwm_frequency] || @default_frequency
+
+    case Pwm.hardware_pwm(pin, frequency, level) do
+      :ok -> :ok
+      {:error, error_atom} -> {:error, to_string(error_atom)}
+    end
+  end
 end

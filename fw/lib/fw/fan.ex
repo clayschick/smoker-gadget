@@ -22,21 +22,15 @@ defmodule Fw.Fan do
     config = Application.get_env(:fw, Fw.Fan, [])
     adapter = config[:pwm_adapter] || @default_adapter
 
-    frequency = min(pid_output * 1000, 1_000_000) |> trunc
+    level = min(pid_output * 1000, 1_000_000) |> trunc
 
-    Logger.debug("PWM frequency: #{frequency}")
+    Logger.debug("PWM duty_cycle level: #{level}")
 
-    adapter.adjust(25_000, frequency)
-
-    :ok
+    case adapter.set_duty_cycle(level) do
+      :ok -> :ok
+      {:error, msg} -> Logger.error(msg)
+    end
   end
 
-  def stop do
-    config = Application.get_env(:fw, Fw.Fan, [])
-    adapter = config[:pwm_adapter] || @default_adapter
-
-    adapter.stop()
-
-    :ok
-  end
+  def stop, do: adjust(0)
 end

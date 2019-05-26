@@ -2,6 +2,7 @@ defmodule Fw.MixProject do
   use Mix.Project
 
   @target System.get_env("MIX_TARGET") || "host"
+  @target_env System.get_env("MIX_ENV") || "test"
 
   def project do
     [
@@ -9,6 +10,7 @@ defmodule Fw.MixProject do
       version: "0.1.0",
       elixir: "~> 1.6",
       target: @target,
+      target_env: @target_env,
       archives: [nerves_bootstrap: "~> 1.0"],
       deps_path: "deps/#{@target}",
       build_path: "_build/#{@target}",
