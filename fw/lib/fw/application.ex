@@ -9,7 +9,6 @@ defmodule Fw.Application do
   use Application
 
   def start(_type, _args) do
-    IO.inspect(Mix.Project.config())
     stop_fan(@target_env)
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

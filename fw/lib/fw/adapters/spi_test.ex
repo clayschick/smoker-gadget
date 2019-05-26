@@ -18,8 +18,7 @@ defmodule Fw.Adapters.SpiTest do
   @impl true
   def transfer(_ref, _data) do
     rtd_value =
-      Agent.get(__MODULE__, & &1)
-      |> trunc
+      Agent.get(__MODULE__, & trunc(&1))
 
     {:ok, <<0::size(8), rtd_value::size(15), 0::size(1)>>}
   end

@@ -62,7 +62,8 @@ defmodule Fw.MixProject do
   # Specify target specific dependencies
   defp deps("host") do
     [
-      {:ex_doc, "~> 0.20", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.20", only: :dev, runtime: false},
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false}
     ]
   end
 
