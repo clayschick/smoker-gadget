@@ -4,15 +4,15 @@
 
 ### What to do next
 
-- write some unit tests
--- test the PID controller output
--- test the Temperature read?
--- test the Fan adjustment?
 - add specs and dialyix
 - setup the Pi to use WIFI
 - add an output graph to the UI
 - find a box to put it all in and a way to hook into the grill - Try a cardboard box first
 - keep updating the module and function docs
+- write some unit tests
+-- test the PID controller output - Done
+-- test the Temperature read?
+-- test the Fan adjustment?
 
 - fix the livereload - don't know if I care
 
