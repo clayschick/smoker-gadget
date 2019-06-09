@@ -9,6 +9,7 @@ defmodule Fw.Adapters.Pwm do
   @default_frequency 25_000
 
   @impl true
+  @spec set_duty_cycle(integer) :: :ok | {:error, String.t}
   def set_duty_cycle(level \\ 0) do
     config = Application.get_env(:fw, Fw.Fan, [])
     pin = config[:pwm_pin] || @default_pin

@@ -1,4 +1,4 @@
-defmodule Pid.Agent do
+defmodule Pid.ControllerAgent do
   @moduledoc """
   State used by the PID Controller.
   """
@@ -24,12 +24,16 @@ defmodule Pid.Agent do
   """
   def start_link(_option_list \\ []), do: Agent.start_link(fn -> %State{} end, name: __MODULE__)
 
+  @spec update(keyword) :: :ok
   def update(new_state_fields), do: Agent.update(__MODULE__, &struct!(&1, new_state_fields))
 
+  @spec get_state :: %State{}
   def get_state, do: Agent.get(__MODULE__, & &1)
 
+  @spec reset :: :ok
   def reset, do: Agent.update(__MODULE__, fn _ -> %State{} end)
 
+  @spec init(integer, float, float, float) :: :ok
   def init(sp, kp, ki, kd) do
     now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
     current_temp = Fw.Temperature.read()

@@ -2,7 +2,7 @@ defmodule Fw.Adapters.SpiBehaviour do
   @moduledoc """
   Specification for SPI behaviour
   """
-  @callback open(device :: String.t(), options :: charlist()) :: {:ok, reference()}
+  @callback open(device :: String.t, options :: charlist) :: {:ok, reference}
 
-  @callback transfer(ref :: reference(), data :: binary) :: {:ok, binary()}
+  @callback transfer(ref :: reference, data :: binary) :: {:ok, binary}
 end

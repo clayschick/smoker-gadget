@@ -8,6 +8,7 @@ defmodule Ui.PidControl do
   Stops the controller and ui update task by setting the
   Ui.Agent.auto to false.
   """
+  @spec stop :: :ok
   def stop, do: Ui.Agent.set_auto(false)
 
   @doc """
@@ -15,6 +16,7 @@ defmodule Ui.PidControl do
 
   Sets the UI auto state to true.
   """
+  @spec start :: :ok
   def start do
     :ok = Ui.Agent.set_auto(true)
 
@@ -30,6 +32,7 @@ defmodule Ui.PidControl do
   matched in the function definition. The `:ok` returned will
   end the Task.
   """
+  @spec ui_loop(boolean) :: :ok
   def ui_loop(true) do
     Pid.Controller.cycle() |> broadcast_to_ui()
 

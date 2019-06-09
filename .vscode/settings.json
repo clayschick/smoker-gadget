@@ -1,3 +1,4 @@
 {
-    "elixir.projectPath": "./fw"
+    "elixirLS.projectDir": "fw/",
+    "elixirLS.mixEnv": "dev"
 }

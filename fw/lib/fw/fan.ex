@@ -19,6 +19,7 @@ defmodule Fw.Fan do
   @default_adapter Fw.Adapters.Pwm
   @default_multiplier 1000
 
+  @spec adjust(number) :: :ok | {:error, any}
   def adjust(pid_output) do
     config = Application.get_env(:fw, Fw.Fan, [])
     adapter = config[:pwm_adapter] || @default_adapter
@@ -34,5 +35,6 @@ defmodule Fw.Fan do
     end
   end
 
+  @spec stop :: :ok | {:error, any}
   def stop, do: adjust(0)
 end

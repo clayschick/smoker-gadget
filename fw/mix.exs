@@ -15,6 +15,7 @@ defmodule Fw.MixProject do
       deps_path: "deps/#{@target}",
       build_path: "_build/#{@target}",
       lockfile: "mix.lock.#{@target}",
+      # elixirc_paths: elixirc_paths(@target_env),
       start_permanent: Mix.env() == :prod,
       build_embedded: @target != "host",
       aliases: [loadconfig: [&bootstrap/1]],
@@ -46,6 +47,10 @@ defmodule Fw.MixProject do
     ]
   end
 
+  # Specifies which paths to compile per environment.
+  # defp elixirc_paths(:test), do: ["lib", "test/support"]
+  # defp elixirc_paths(_), do: ["lib"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
@@ -54,6 +59,8 @@ defmodule Fw.MixProject do
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
       {:timex, "~> 3.5"},
+      {:circuits_spi, "~> 0.1"},
+      {:pigpiox, "~> 0.1"},
       {:ui, path: "../ui"},
       {:pid, path: "../pid"}
     ] ++ deps(@target)
@@ -63,16 +70,15 @@ defmodule Fw.MixProject do
   defp deps("host") do
     [
       {:ex_doc, "~> 0.20", only: :dev, runtime: false},
-      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev, :test], runtime: false}
     ]
   end
 
   defp deps(target) do
     [
       {:nerves_runtime, "~> 0.6"},
-      {:nerves_init_gadget, "~> 0.4"},
-      {:circuits_spi, "~> 0.1"},
-      {:pigpiox, "~> 0.1"}
+      {:nerves_init_gadget, "~> 0.4"}
     ] ++ system(target)
   end
 

@@ -13,6 +13,7 @@ defmodule Pid.Controller do
   - the MAX31865 needs at least 65 milliseconds because it has a frequency
     at which it will cycle through a read or write
   """
+  @spec evaluate(float) :: float
   def evaluate(input) do
     state = Pid.Agent.get_state()
     now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
@@ -50,8 +51,10 @@ defmodule Pid.Controller do
   Use these functions to handle adapter config stuff and other things
   specific to reading and adjusting the side-effecty things
   """
+  @spec read :: float
   def read, do: Fw.Temperature.read()
 
+  @spec adjust(number) :: :ok | {:error, any}
   def adjust(output), do: Fw.Fan.adjust(output)
 
   @doc """
@@ -59,6 +62,7 @@ defmodule Pid.Controller do
   read/evaluate/adjust cycle. Returns the input and
   output together to be consumed by the UI.
   """
+  @spec cycle :: {:ok, %{input: float, output: float}} | String.t
   def cycle do
     with {:read, input} <- {:read, read()},
          {:evaluate, output} <- {:evaluate, evaluate(input)},
@@ -67,7 +71,6 @@ defmodule Pid.Controller do
       {:ok, %{input: input, output: output}}
     else
       # Can pattern match on the error to be more specific
-      # Need to send the message to the Logger
       {:read, msg} -> "Error while reading input - #{msg}" |> Logger.error
       {:evaluate, msg} -> "Error while evaluating - #{msg}" |> Logger.error
       {:adjust, msg} -> "Error while adjusting - #{msg}" |> Logger.error

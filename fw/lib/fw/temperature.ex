@@ -21,6 +21,7 @@ defmodule Fw.Temperature do
   @doc """
   Use Keyword.fetch!/2 for required fields in the options list
   """
+  @spec start_link(list) :: any
   def start_link(_option_list \\ []) do
     Agent.start_link(&connect/0, name: __MODULE__)
   end
@@ -35,6 +36,7 @@ defmodule Fw.Temperature do
   The configuration (register 0x80) is a one time setup
   for 3-wire config and auto conversion mode.
   """
+  @spec connect :: %{ref: reference, adapter: module}
   def connect do
     config = Application.get_env(:fw, Fw.Temperature, [])
     adapter = config[:spi_adapter] || @default_adapter
@@ -64,6 +66,7 @@ defmodule Fw.Temperature do
   > Note that a single conversion requires approximately 52ms
   > in 60Hz filter mode or 62.5ms in 50Hz filter mode to complete.
   """
+  @spec read :: float
   def read do
     %{ref: ref, adapter: adapter} = Agent.get(__MODULE__, & &1)
 
@@ -91,6 +94,7 @@ defmodule Fw.Temperature do
   @doc """
   Generates a stream of temperature values.
   """
+  @spec stream :: Enumerable.number
   def stream do
     Stream.repeatedly(fn -> read() end)
   end
