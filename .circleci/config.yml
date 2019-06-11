@@ -18,7 +18,8 @@ jobs:
 
     working_directory: ~/fw
     steps:
-      - checkout: ~/ # check out source code to working directory
+      - checkout: # check out source code to specified path (defaults to working_directory)
+        key: ~/
 
       - run: mix local.hex --force  # install Hex locally (without prompt)
       - run: mix local.rebar --force  # fetch a copy of rebar (without prompt)
