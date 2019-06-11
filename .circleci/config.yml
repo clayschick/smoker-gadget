@@ -20,7 +20,7 @@ jobs:
     steps:
       - add_ssh_keys:
           fingerprints:
-            - "3b:78:9d:44:07:eb:51:fe:90:19:92:88:63:1e:15:f4"
+            - "fc:aa:cb:d8:4c:17:8b:d5:69:df:a3:4f:3e:ae:3f:e4"
       - checkout: # check out source code to specified path (defaults to working_directory)
           path: ~/app
 
