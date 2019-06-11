@@ -21,8 +21,8 @@ jobs:
       - checkout: # check out source code to specified path (defaults to working_directory)
           path: ~/app
 
-      - run: mix local.hex --force  # install Hex locally (without prompt)
-      - run: mix local.rebar --force  # fetch a copy of rebar (without prompt)
+      # - run: mix local.hex --force  # install Hex locally (without prompt)
+      # - run: mix local.rebar --force  # fetch a copy of rebar (without prompt)
 
       # - restore_cache: # for the fw mix application
       #     keys:
