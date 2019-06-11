@@ -18,9 +18,6 @@ jobs:
 
     working_directory: ~/app/fw
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "8e:fd:b9:0e:d3:df:1f:97:af:51:98:d6:fd:39:2c:36"
       - checkout: # check out source code to specified path (defaults to working_directory)
           path: ~/app
 
