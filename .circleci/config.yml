@@ -18,11 +18,14 @@ jobs:
 
     working_directory: ~/app/fw
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "3b:78:9d:44:07:eb:51:fe:90:19:92:88:63:1e:15:f4"
       - checkout: # check out source code to specified path (defaults to working_directory)
           path: ~/app
 
-      # - run: mix local.hex --force  # install Hex locally (without prompt)
-      # - run: mix local.rebar --force  # fetch a copy of rebar (without prompt)
+      - run: mix local.hex --force  # install Hex locally (without prompt)
+      - run: mix local.rebar --force  # fetch a copy of rebar (without prompt)
 
       # - restore_cache: # for the fw mix application
       #     keys:
