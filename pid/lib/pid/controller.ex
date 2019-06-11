@@ -5,6 +5,8 @@ defmodule Pid.Controller do
 
   require Logger
 
+  alias Pid.ControllerAgent
+
   @doc """
   The controller function that evaluates an output value to be applied to
   something that will adjust the input.
@@ -15,7 +17,7 @@ defmodule Pid.Controller do
   """
   @spec evaluate(float) :: float
   def evaluate(input) do
-    state = Pid.Agent.get_state()
+    state = ControllerAgent.get_state()
     now = DateTime.utc_now() |> DateTime.to_unix(:millisecond)
 
     time_delta = now - state.last_time
@@ -36,7 +38,7 @@ defmodule Pid.Controller do
     Logger.debug("PID Output: #{output}")
 
     :ok =
-      Pid.Agent.update(
+      ControllerAgent.update(
         # accumulation_of_error: accumulation_of_error,
         last_input: input,
         last_output: output,

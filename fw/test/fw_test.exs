@@ -1,5 +1,8 @@
 defmodule FwTest do
   use ExUnit.Case
+
+  alias Pid.ControllerAgent
+
   doctest Fw
 
   test "PID controller output" do
@@ -12,7 +15,7 @@ defmodule FwTest do
 
     # The pid_control_channel in the UI sets the PID state like this
     # when it handles the controller start message
-    :ok = Pid.Agent.init(setpoint, kp, ki, kd)
+    :ok = ControllerAgent.init(setpoint, kp, ki, kd)
 
     assert expected_output == Pid.Controller.evaluate(temp)
   end

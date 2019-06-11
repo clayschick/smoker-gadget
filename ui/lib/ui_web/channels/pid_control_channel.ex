@@ -2,11 +2,13 @@ defmodule UiWeb.PidControlChannel do
   @moduledoc """
   Channel module for handling control messages from the UI.
 
-  This module talks directly to the Pid.Agent and updates it's
+  This module talks directly to the Pid.ControllerAgent and updates it's
   dependent state values. There is a certain amount of validation
   done here since this is the closest to the UI arguments.
   """
   use Phoenix.Channel
+
+  alias Pid.ControllerAgent
 
   def join("pid:control", _message, socket) do
     # send(self, {:output, 0.0})
@@ -17,7 +19,7 @@ defmodule UiWeb.PidControlChannel do
     # Should move the to_integer into the server so that it can
     # crash as an unhandled error and the server will be restarted
     # instead of this Channel being restarted
-    :ok = Pid.Agent.update(setpoint: String.to_integer(setpoint))
+    :ok = ControllerAgent.update(setpoint: String.to_integer(setpoint))
 
     # push(socket, "setpoint_updated", %{setpoint: setpoint})
 
@@ -25,19 +27,19 @@ defmodule UiWeb.PidControlChannel do
   end
 
   def handle_in("kp_update", %{"kp" => kp}, socket) do
-    :ok = Pid.Agent.update(kp: String.to_float(kp))
+    :ok = ControllerAgent.update(kp: String.to_float(kp))
 
     {:noreply, socket}
   end
 
   def handle_in("ki_update", %{"ki" => ki}, socket) do
-    :ok = Pid.Agent.update(ki: String.to_float(ki))
+    :ok = ControllerAgent.update(ki: String.to_float(ki))
 
     {:noreply, socket}
   end
 
   def handle_in("kd_update", %{"kd" => kd}, socket) do
-    :ok = Pid.Agent.update(kd: String.to_float(kd))
+    :ok = ControllerAgent.update(kd: String.to_float(kd))
 
     {:noreply, socket}
   end
@@ -70,7 +72,7 @@ defmodule UiWeb.PidControlChannel do
         :error -> 0.0
       end
 
-    :ok = Pid.Agent.init(setpoint, kp, ki, kd)
+    :ok = ControllerAgent.init(setpoint, kp, ki, kd)
 
     :ok = Ui.PidControl.start()
 
@@ -84,7 +86,7 @@ defmodule UiWeb.PidControlChannel do
   end
 
   def handle_in("send_updates", {}, socket) do
-    controller_state = Pid.Agent.get_state()
+    controller_state = ControllerAgent.get_state()
 
     push(socket, "controller_updated", %{
       input: controller_state.last_input,

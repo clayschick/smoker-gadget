@@ -5,12 +5,14 @@ defmodule Pid.Application do
 
   use Application
 
+  alias Pid.ControllerAgent
+
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: Pid.Worker.start_link(arg)
       # {Pid.Worker, arg}
-      Pid.Agent
+      ControllerAgent
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

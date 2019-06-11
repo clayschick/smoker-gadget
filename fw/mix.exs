@@ -60,7 +60,7 @@ defmodule Fw.MixProject do
       {:toolshed, "~> 0.2"},
       {:timex, "~> 3.5"},
       {:circuits_spi, "~> 0.1"},
-      {:pigpiox, "~> 0.1"},
+      # {:pigpiox, "~> 0.1"},
       {:ui, path: "../ui"},
       {:pid, path: "../pid"}
     ] ++ deps(@target)
@@ -78,7 +78,8 @@ defmodule Fw.MixProject do
   defp deps(target) do
     [
       {:nerves_runtime, "~> 0.6"},
-      {:nerves_init_gadget, "~> 0.4"}
+      {:nerves_init_gadget, "~> 0.4"},
+      {:pigpiox, "~> 0.1"}
     ] ++ system(target)
   end
 
